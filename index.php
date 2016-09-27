@@ -14,23 +14,37 @@ require_once 'Task.php';
 if(isset($_SESSION['tasks'])) {
     $tasks = unserialize($_SESSION['tasks']);
 }
- else {
-     $tasks =[];
-}
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
     if(isset($_POST['name']) && isset($_POST['description'])){
         $tasks[] = new Task($_POST['name'], $_POST['description'] );
         $_SESSION['tasks'] = serialize($tasks);
     }
 }
-var_dump($tasks);
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+</style>
 </head>
 <body>
+<?php
+    if(isset($tasks)){
+        echo '<table>';
+        echo '<tr><th>Task name</th><th>Task description</th></tr>';
+        foreach ($tasks as $task) {
+            echo "<tr><td>" . $task->getTaskName() . "</td><td>"
+                . $task->getTaskDescript() . "</td></tr>";
+        }
+        echo '</table>';
+    }
+?>
     <form action="addTask.php" method="POST">
         <label>
             <input type="submit" name="new" value='Add new task'>
