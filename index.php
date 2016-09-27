@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once 'Task.php';
-/*    require_once 'Task.php';
+/*    Zadanie 2
     $task = [];
     $task[] = new Task('Work', 'Go to work');
     $task[] = new Task('Play game', 'Play GTA V all day');
@@ -16,9 +16,10 @@ if(isset($_SESSION['tasks'])) {
 }
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
     if(isset($_POST['name']) && isset($_POST['description']) &&
-            strlen(trim($_POST['name'])) > 0 && 
-            strlen(trim($_POST['description'])) > 0){
-        $tasks[] = new Task(trim($_POST['name']), trim($_POST['description']));
+        strlen(trim($_POST['name'])) > 0 && 
+        strlen(trim($_POST['description'])) > 0){
+        $tasks[] = new Task(trim($_POST['name']), trim($_POST['description']),
+                $_POST['priority'], $_POST['date']);
         $_SESSION['tasks'] = serialize($tasks);
     }
 } else if($_SERVER['REQUEST_METHOD'] == 'GET')  {
@@ -44,9 +45,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 <?php
     if(isset($tasks)){
         echo "<form action='index.php' method='GET'><table>";
-        echo '<tr><th>Task name</th><th>Task description</th></tr>';
+        echo '<tr><th>Task name</th><th>Task description</th>'
+        . '<th>Priority</th><th>Date</th></tr>';
+        
         foreach ($tasks as $key=>$task) {
-            echo '<tr>';
+            $styleRow = ($task->getDate() != '' && $task->getDate() < date('Y-m-d')) ? "style='color:red'" : ""; 
+            echo "<tr $styleRow >";
             $task->showTaskInArrayRow();
         echo "<td><input type='submit' class='button' name='$key' value='Finish'></td></tr>";
         }
