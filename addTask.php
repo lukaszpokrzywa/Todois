@@ -12,12 +12,12 @@
         <form action="index.php" method="POST">
             <label>
                 Task name:<br>
-                <input type='text' size='34' name='name'>
+                <input type='text' size='34' maxlength="30" name='name'>
             </label>
             <br>
             <label>
                 Task description:<br>
-                <textarea rows="10" cols="30" name='description'></textarea>
+                <textarea rows="10" cols="30" maxlength="100" name='description'></textarea>
             </label>
             <br>
             <input type='submit' value="Add task">

@@ -15,9 +15,16 @@ if(isset($_SESSION['tasks'])) {
     $tasks = unserialize($_SESSION['tasks']);
 }
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if(isset($_POST['name']) && isset($_POST['description'])){
-        $tasks[] = new Task($_POST['name'], $_POST['description'] );
+    if(isset($_POST['name']) && isset($_POST['description']) &&
+            strlen(trim($_POST['name'])) > 0 && 
+            strlen(trim($_POST['description'])) > 0){
+        $tasks[] = new Task(trim($_POST['name']), trim($_POST['description']));
         $_SESSION['tasks'] = serialize($tasks);
+    }
+} else if($_SERVER['REQUEST_METHOD'] == 'GET')  {
+    foreach($_GET as $key => $val) {
+            $tasks[$key]->finishTask();
+            $_SESSION['tasks'] = serialize($tasks);
     }
 }
 ?>
@@ -36,13 +43,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
 <?php
     if(isset($tasks)){
-        echo '<table>';
+        echo "<form action='index.php' method='GET'><table>";
         echo '<tr><th>Task name</th><th>Task description</th></tr>';
-        foreach ($tasks as $task) {
-            echo "<tr><td>" . $task->getTaskName() . "</td><td>"
-                . $task->getTaskDescript() . "</td></tr>";
+        foreach ($tasks as $key=>$task) {
+            echo '<tr>';
+            $task->showTaskInArrayRow();
+        echo "<td><input type='submit' class='button' name='$key' value='Finish'></td></tr>";
         }
-        echo '</table>';
+        echo '</table></form>';
     }
 ?>
     <form action="addTask.php" method="POST">
