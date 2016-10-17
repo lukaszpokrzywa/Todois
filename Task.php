@@ -35,20 +35,26 @@ class Task {
     }
     
     public function getFinished() {
-        $this->finished;
+        return $this->finished; //tutaj brakowało return
     }
     public function finishTask() {
         $this->finished = true;
     }
     public function setPriority($newPriority) {
         if (strlen(trim($newPriority)) > 0) {
-            $this->priority = trim($newPriority);
+            /* 
+             * tutaj dodałem jeszcze sprawdzenie czy $newPriority
+             * to tekst ze zbioru ('none', 'high', 'medium', 'low'),
+             */
+            $priorities = ['none', 'high', 'medium', 'low'];
+            $this->priority = in_array(trim($newPriority), $priorities) ? trim($newPriority) : 'none';
         }
     }
     public function getPriority() {
         return $this->priority;
     }
     public function setDate($newDate) {
+        //można byłoby dodać czy data jest w poprawnym formacie
         $this->date = $newDate;
     }
     public function getDate() {
